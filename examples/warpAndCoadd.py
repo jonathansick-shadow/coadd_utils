@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -11,14 +11,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 """Demonstrate how to create a coadd by warping and adding.
@@ -34,6 +34,7 @@ import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
 import lsst.afw.math as afwMath
 import lsst.coadd.utils as coaddUtils
+
 
 class WarpAndCoaddConfig(pexConfig.Config):
     saveDebugImages = pexConfig.Field(
@@ -60,17 +61,17 @@ class WarpAndCoaddConfig(pexConfig.Config):
     )
     coadd = pexConfig.ConfigField(dtype = coaddUtils.Coadd.ConfigClass, doc = "")
     warp = pexConfig.ConfigField(dtype = afwMath.Warper.ConfigClass, doc = "")
-    
+
 
 def warpAndCoadd(coaddPath, exposureListPath, config):
     """Create a coadd by warping and psf-matching
-    
+
     Inputs:
     - coaddPath: path to desired coadd; ovewritten if it exists
     - exposureListPath: a file containing a list of paths to input exposures;
         blank lines and lines that start with # are ignored
     - config: an instance of WarpAndCoaddConfig
-    
+
     The first exposure in exposureListPath is used as the reference: all other exposures
     are warped to match to it.
     """
@@ -82,7 +83,7 @@ def warpAndCoadd(coaddPath, exposureListPath, config):
     )
     print "SaveDebugImages =", config.saveDebugImages
     print "bbox =", bbox
-    
+
     zpScaler = coaddUtils.ZeropointScaler(config.coaddZeroPoint)
 
     # process exposures
@@ -104,7 +105,7 @@ def warpAndCoadd(coaddPath, exposureListPath, config):
                 exposure = afwImage.ExposureF(exposurePath, 0, bbox, afwImage.LOCAL)
                 if config.saveDebugImages:
                     exposure.writeFits("exposure%s.fits" % (expNum,))
-                
+
                 if not coadd:
                     print >> sys.stderr, "Create warper and coadd with size and WCS matching the first/reference exposure"
                     warper = afwMath.Warper.fromConfig(config.warp)
@@ -113,7 +114,7 @@ def warpAndCoadd(coaddPath, exposureListPath, config):
                         wcs = exposure.getWcs(),
                         config = config.coadd)
                     print "badPixelMask=", coadd.getBadPixelMask()
-                    
+
                     print >> sys.stderr, "Add reference exposure to coadd (without warping)"
                     coadd.addExposure(exposure)
                 else:
@@ -125,7 +126,7 @@ def warpAndCoadd(coaddPath, exposureListPath, config):
                     )
                     if config.saveDebugImages:
                         warpedExposure.writeFits("warped%s.fits" % (expNum,))
-                    
+
                     print >> sys.stederr, "Scale exposure to desired photometric zeropoint"
                     zpScaler.scaleExposure(warpedExposure)
 
@@ -173,14 +174,14 @@ where:
     if len(sys.argv) != 3:
         print helpStr
         sys.exit(0)
-    
+
     coaddPath = sys.argv[1]
     if os.path.exists(coaddPath):
         print >> sys.stderr, "Coadd file %s already exists" % (coaddPath,)
         sys.exit(1)
-    
+
     exposureListPath = sys.argv[2]
-    
+
     config = WarpAndCoaddConfig()
-    
+
     warpAndCoadd(coaddPath, exposureListPath, config)

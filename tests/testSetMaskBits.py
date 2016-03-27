@@ -35,6 +35,7 @@ Verbosity = 0
 
 pexLog.Trace_setVerbosity("lsst.coadd.utils", Verbosity)
 
+
 def countBits(val):
     nBits = 0
     while val > 0:
@@ -47,9 +48,11 @@ MaxBitMask = (2**afwImage.MaskU_getNumPlanesMax() - 1)
 
 MaskPlaneNameIDDict = dict(afwImage.MaskU().getMaskPlaneDict())
 
+
 class AddToCoaddTestCase(unittest.TestCase):
     """A test case for setMaskBits
     """
+
     def testBits(self):
         """Test that the bits set are correct"""
 
@@ -68,6 +71,7 @@ class AddToCoaddTestCase(unittest.TestCase):
             self.assertEqual(countBits(invBitMask), totNumBits - numPlanes)
             for planeName, planeId in MaskPlaneNameIDDict.iteritems():
                 self.assertEqual((invBitMask & (1 << planeId)) > 0, planeName not in setPlaneNameList)
+
 
 def suite():
     """Return a suite containing all the test cases in this module.

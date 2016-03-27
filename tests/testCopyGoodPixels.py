@@ -38,11 +38,12 @@ try:
     display
 except NameError:
     display = False
-    Verbosity = 0 # increase to see trace
+    Verbosity = 0  # increase to see trace
 
 pexLog.Trace_setVerbosity("lsst.coadd.utils", Verbosity)
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 
 def referenceCopyGoodPixelsImage(destImage, srcImage):
     """Reference implementation of lsst.coadd.utils.copyGoodPixels for Images
@@ -59,7 +60,7 @@ def referenceCopyGoodPixelsImage(destImage, srcImage):
     - destImage: new destImage
     - numGoodPix: number of good pixels
     """
-    destImage = destImage.Factory(destImage, True) # make deep copy
+    destImage = destImage.Factory(destImage, True)  # make deep copy
 
     overlapBBox = destImage.getBBox()
     overlapBBox.clip(srcImage.getBBox())
@@ -79,6 +80,7 @@ def referenceCopyGoodPixelsImage(destImage, srcImage):
     numGoodPix = numpy.sum(numpy.logical_not(isBadArray))
     return destImage, numGoodPix
 
+
 def referenceCopyGoodPixelsMaskedImage(destImage, srcImage, badPixelMask):
     """Reference implementation of lsst.coadd.utils.copyGoodPixels for MaskedImages
 
@@ -93,7 +95,7 @@ def referenceCopyGoodPixelsMaskedImage(destImage, srcImage, badPixelMask):
     - destImage: new destImage
     - numGoodPix: number of good pixels
     """
-    destImage = destImage.Factory(destImage, True) # make deep copy
+    destImage = destImage.Factory(destImage, True)  # make deep copy
 
     overlapBBox = destImage.getBBox()
     overlapBBox.clip(srcImage.getBBox())
@@ -119,9 +121,11 @@ def referenceCopyGoodPixelsMaskedImage(destImage, srcImage, badPixelMask):
 
 MaxMask = 0xFFFF
 
+
 class CopyGoodPixelsTestCase(utilsTests.TestCase):
     """A test case for copyGoodPixels
     """
+
     def getSolidMaskedImage(self, bbox, val, badMask=0):
         afwDim = bbox.getDimensions()
         npShape = (afwDim[1], afwDim[0])
@@ -147,8 +151,8 @@ class CopyGoodPixelsTestCase(utilsTests.TestCase):
         numpy.random.seed(0)
         maskedImage = afwImage.MaskedImageF(bbox)
         imageArrays = maskedImage.getArrays()
-        imageArrays[0][:] = numpy.random.normal(5000, 5000, npShape) # image
-        imageArrays[2][:] = numpy.random.normal(3000, 3000, npShape) # variance
+        imageArrays[0][:] = numpy.random.normal(5000, 5000, npShape)  # image
+        imageArrays[2][:] = numpy.random.normal(3000, 3000, npShape)  # variance
         imageArrays[1][:] = numpy.logical_and(numpy.random.random_integers(0, 7, npShape), ~excludeMask)
         return maskedImage
 

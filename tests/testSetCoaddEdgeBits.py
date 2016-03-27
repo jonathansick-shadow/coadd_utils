@@ -34,7 +34,7 @@ import lsst.utils.tests as utilsTests
 import lsst.pex.logging as pexLog
 import lsst.coadd.utils as coaddUtils
 
-Verbosity = 0 # increase to see trace
+Verbosity = 0  # increase to see trace
 pexLog.Trace_setVerbosity("lsst.coadd.utils", Verbosity)
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -43,6 +43,7 @@ pexLog.Trace_setVerbosity("lsst.coadd.utils", Verbosity)
 class SetCoaddEdgeBitsTestCase(unittest.TestCase):
     """A test case for setCoaddEdgeBits
     """
+
     def testRandomMap(self):
         """Test setCoaddEdgeBits using a random depth map
         """
@@ -56,7 +57,7 @@ class SetCoaddEdgeBitsTestCase(unittest.TestCase):
         refCoaddMaskArray = coaddMask.getArray()
         edgeMask = afwImage.MaskU.getPlaneBitMask("NO_DATA")
         refCoaddMaskArray |= numpy.array(numpy.where(depthMapArray > 0, 0, edgeMask),
-            dtype=refCoaddMaskArray.dtype)
+                                         dtype=refCoaddMaskArray.dtype)
 
         coaddUtils.setCoaddEdgeBits(coaddMask, depthMap)
         coaddMaskArray = coaddMask.getArray()
@@ -70,6 +71,7 @@ class SetCoaddEdgeBitsTestCase(unittest.TestCase):
             self.fail(errMsg)
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 
 def suite():
     """Return a suite containing all the test cases in this module.
